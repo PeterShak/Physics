@@ -2,34 +2,36 @@ class Mover {
   constructor(x, y, dx, dy, r, c) {
     this.position = createVector(x, y);
     this.velocity = createVector(dx, dy);
+    this.acceleration = createVector(0, 0); 
     this.r = r;
     this.c = c;
     this.isMagnet = false; 
   }
 
-  update() {
-  if (!this.isMagnet) {
-    this.applyForce(createVector(0, G));
-    this.applyForce(createVector(wind, 0));
-    this.move();
+  applyForce(force) {
+    this.acceleration.add(force); // Add force to acceleration
   }
-  this.containWithinWindow();
-  this.draw();
-}
 
+  update() {
+    if (!this.isMagnet) {
+      
+      this.applyForce(createVector(0, G));
+      this.applyForce(createVector(wind, 0));
+
+      this.velocity.add(this.acceleration);
+      this.position.add(this.velocity);
+
+      this.acceleration.mult(0);
+    }
+
+    this.containWithinWindow();
+    this.draw();
+  }
 
   draw() {
-    fill(this.c); 
+    fill(this.c);
     circle(this.position.x, this.position.y, this.r);
   }
-
-  move() {
-    this.position.add(this.velocity);
-  }
-
- applyForce(force) {
-  this.velocity.add(force);
-}
 
   containWithinWindow() {
     if (this.position.x < this.r) {
@@ -51,7 +53,7 @@ class Mover {
   }
 
   display() {
-    fill(this.c); 
+    fill(this.c);
     circle(this.position.x, this.position.y, this.r);
   }
 }
