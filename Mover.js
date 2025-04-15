@@ -6,10 +6,21 @@ class Mover {
     this.r = r;
     this.c = c;
     this.isMagnet = false; 
+    this.frictionCoefficient = 0.01; // smaller number means more slippery
   }
 
+  applyFriction() {
+  if (this.velocity.mag() > 0.01) { 
+    let friction = this.velocity.copy(); 
+    friction.normalize();              
+    friction.mult(-1);                
+    friction.mult(this.frictionCoefficient); 
+    this.applyForce(friction);        
+  }
+}
+
   applyForce(force) {
-    this.acceleration.add(force); // Add force to acceleration
+    this.acceleration.add(force); 
   }
 
   update() {
@@ -17,6 +28,8 @@ class Mover {
       
       this.applyForce(createVector(0, G));
       this.applyForce(createVector(wind, 0));
+      
+      this.applyFriction();
 
       this.velocity.add(this.acceleration);
       this.position.add(this.velocity);
