@@ -8,14 +8,15 @@ class Mover {
   }
 
   update() {
-    if (!this.isMagnet) {
-      this.applyGravity();  
-      this.applyWind();     
-      this.move();
-    }
-    this.containWithinWindow();
-    this.draw();
+  if (!this.isMagnet) {
+    this.applyForce(createVector(0, G));
+    this.applyForce(createVector(wind, 0));
+    this.move();
   }
+  this.containWithinWindow();
+  this.draw();
+}
+
 
   draw() {
     fill(this.c); 
@@ -26,13 +27,9 @@ class Mover {
     this.position.add(this.velocity);
   }
 
-  applyGravity() {
-    this.velocity.y += G;
-  }
-
-  applyWind() {
-    this.velocity.x += wind;
-  }
+ applyForce(force) {
+  this.velocity.add(force);
+}
 
   containWithinWindow() {
     if (this.position.x < this.r) {
@@ -54,7 +51,7 @@ class Mover {
   }
 
   display() {
-    fill(this.c || 'red'); 
+    fill(this.c); 
     circle(this.position.x, this.position.y, this.r);
   }
 }
