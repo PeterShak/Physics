@@ -6,14 +6,15 @@ let colorlist = [
 
 let movers = [];
 let magnets = [];
-let G = 0.1;
-let wind = 0.1;
+let G = 0.1;   
+let wind = 0.1;    
 let magnetStrength = 20;
 
 function setup() {
   createCanvas(400, 400);
   ellipseMode(RADIUS);
 
+  
   for (let i = 0; i < 10; i++) {
     movers.push(
       new Mover(
@@ -38,30 +39,31 @@ function draw() {
     }
   }
 
+  // Update all movers
   for (let mover of movers) {
     mover.update();
   }
 
   // Draw magnets
   for (let magnet of magnets) {
-    magnet.display(); 
+    magnet.display();
   }
 }
 
-// Click to add a new magnet
+// When mouse is pressed, create a new magnet at the mouse position
 function mousePressed() {
-  let m = new Mover(mouseX, mouseY, 0, 0, 30, color(0, 0, 255));
+  let m = new Mover(mouseX, mouseY, 0, 0, 30, color(0, 0, 255)); // Cyan
   m.isMagnet = true;
   magnets.push(m);
 }
 
-// Magnetic force from magnet to mover
+// Apply magnetic force from a magnet to a mover
 function applyMagneticForce(magnet, mover) {
   let force = p5.Vector.sub(magnet.position, mover.position);
   let distance = force.mag();
 
   if (distance > 0) {
     force.setMag(magnetStrength / distance);
-    mover.velocity.add(force);
+    mover.applyForce(force);
   }
 }
