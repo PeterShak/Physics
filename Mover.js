@@ -1,63 +1,60 @@
-// Mover.js
-
 class Mover {
   constructor(x, y, dx, dy, r, c) {
-    this.x = x;
-    this.y = y;
-    this.dx = dx;
-    this.dy = dy;
+    this.position = createVector(x, y);
+    this.velocity = createVector(dx, dy);
     this.r = r;
     this.c = c;
     this.isMagnet = false; 
   }
 
   update() {
-    this.applyGravity();  
-    this.applyWind();     
-    this.move();
+    if (!this.isMagnet) {
+      this.applyGravity();  
+      this.applyWind();     
+      this.move();
+    }
     this.containWithinWindow();
     this.draw();
   }
 
   draw() {
-    fill(this.c);
-    circle(this.x, this.y, this.r);
+    fill(this.c); 
+    circle(this.position.x, this.position.y, this.r);
   }
 
   move() {
-    this.x += this.dx;
-    this.y += this.dy;
+    this.position.add(this.velocity);
   }
 
   applyGravity() {
-    this.dy += G; 
+    this.velocity.y += G;
   }
 
   applyWind() {
-    this.dx += wind; 
+    this.velocity.x += wind;
   }
 
   containWithinWindow() {
-    if (this.x < this.r) { 
-      this.x = this.r;
-      this.dx *= -1;
+    if (this.position.x < this.r) {
+      this.position.x = this.r;
+      this.velocity.x *= -1;
     }
-    if (this.x > width - this.r) { 
-      this.x = width - this.r;
-      this.dx *= -1;
+    if (this.position.x > width - this.r) {
+      this.position.x = width - this.r;
+      this.velocity.x *= -1;
     }
-    if (this.y < this.r) { 
-      this.y = this.r;
-      this.dy *= -1;
+    if (this.position.y < this.r) {
+      this.position.y = this.r;
+      this.velocity.y *= -1;
     }
-    if (this.y > height - this.r) { 
-      this.y = height - this.r;
-      this.dy *= -1;
+    if (this.position.y > height - this.r) {
+      this.position.y = height - this.r;
+      this.velocity.y *= -1;
     }
   }
 
   display() {
-    fill(0, 0, 255); 
-    circle(this.x, this.y, this.r);
+    fill(this.c || 'red'); 
+    circle(this.position.x, this.position.y, this.r);
   }
 }
