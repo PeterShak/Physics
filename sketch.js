@@ -52,7 +52,7 @@ function draw() {
 
 // When mouse is pressed, create a new magnet at the mouse position
 function mousePressed() {
-  let m = new Mover(mouseX, mouseY, 0, 0, 30, color(0, 0, 255)); // Cyan
+  let m = new Mover(mouseX, mouseY, 0, 0, 30, color(0, 0, 255));
   m.isMagnet = true;
   magnets.push(m);
 }
