@@ -4,20 +4,20 @@ class Mover {
     this.velocity = createVector(dx, dy);
     this.acceleration = createVector(0, 0); 
     this.r = r;
-    this.c = c;
     this.isMagnet = false; 
-    this.frictionCoefficient = 0.01; // smaller number means more slippery
+    this.frictionCoefficient = 0.01;
+    this.c = c;
   }
 
   applyFriction() {
-  if (this.velocity.mag() > 0.01) { 
-    let friction = this.velocity.copy(); 
-    friction.normalize();              
-    friction.mult(-1);                
-    friction.mult(this.frictionCoefficient); 
-    this.applyForce(friction);        
+    if (this.velocity.mag() > 0.01) { 
+      let friction = this.velocity.copy(); 
+      friction.normalize();              
+      friction.mult(-1);                
+      friction.mult(this.frictionCoefficient); 
+      this.applyForce(friction);        
+    }
   }
-}
 
   applyForce(force) {
     this.acceleration.add(force); 
@@ -25,15 +25,11 @@ class Mover {
 
   update() {
     if (!this.isMagnet) {
-      
       this.applyForce(createVector(0, G));
       this.applyForce(createVector(wind, 0));
-      
       this.applyFriction();
-
       this.velocity.add(this.acceleration);
       this.position.add(this.velocity);
-
       this.acceleration.mult(0);
     }
 
@@ -44,6 +40,13 @@ class Mover {
   draw() {
     fill(this.c);
     circle(this.position.x, this.position.y, this.r);
+
+    if (this.isMagnet) {
+      fill(255);
+      textAlign(CENTER, CENTER);
+      textSize(12);
+      text(this.charge > 0 ? "+" : "-", this.position.x, this.position.y);
+    }
   }
 
   containWithinWindow() {
@@ -66,7 +69,6 @@ class Mover {
   }
 
   display() {
-    fill(this.c);
-    circle(this.position.x, this.position.y, this.r);
+    this.draw();
   }
 }
